@@ -44,8 +44,8 @@ def prepare_data(x, length, mod=0, scale=1000., clip1=-100., clip2=100.):
         else:
             data[i, st: end] = sig
             
-    data = Add_rpeak_channel(data)
     data = np.clip(data / scale, clip1, clip2)
+    data = Add_rpeak_channel(data)
     
     return data
 
@@ -57,7 +57,7 @@ def select_rpeaks(signals):
         r_peak.extend(peak)
     
     R_peak_arr = np.zeros(len(signals))
-    R_peak_arr[r_peak]=1
+    R_peak_arr[r_peak]=100
     return R_peak_arr
 
 def Add_rpeak_channel(data):
@@ -73,7 +73,7 @@ def Add_rpeak_channel(data):
 def run_12ECG_classifier(data,header_data,loaded_model):
 
     
-    Length = 3800
+    Length = 6000
     
     if data.shape[0] != 12:
         print('Error in number of leads!', data.shape)
