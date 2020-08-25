@@ -141,8 +141,8 @@ def prepare_data(x, length, mod=0, scale=1000., clip1=-100., clip2=100., aug=Tru
         else:
             data[i, st: end] = sig
             
-    data = Add_rpeak_channel(data)
     data = np.clip(data / scale, clip1, clip2)
+    data = Add_rpeak_channel(data)
     
     
     if not aug:
