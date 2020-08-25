@@ -93,14 +93,14 @@ def train_12ECG_classifier(input_directory, output_directory):
     seed = 0
     np.random.seed(seed)
     
-    epoch_size = 50
+    epoch_size = 100
     batch_size = 100
     n_step = 100
     
     learning_rate = 4e-4
-    lambdaa_DG = 1e-3
+    lambdaa_DG = 0
 
-    Length = 5600
+    Length = 6000
 
     #######
     N_data = 10000
@@ -450,7 +450,7 @@ def train_12ECG_classifier(input_directory, output_directory):
             
             batch_mask = domain_masks[train_inds[batch_ind]].copy()
             
-            if np.random.rand() < 0.5:
+            if np.random.rand() < 0.1:
                 batch_mask = np.ones_like(batch_mask)
     
             if np.random.rand() < 0.2:
@@ -467,7 +467,7 @@ def train_12ECG_classifier(input_directory, output_directory):
             p = epoch/epoch_size
             learning_rate = (5e-5/(1+10*p))**(0.75)
             gamma = (2/(1+ math.exp(-10*p)))-1
-            gamma = 1e-1
+            gamma = 0.8
             learning_rate = 8e-4
             
             feed = {X: train_batch, Y: batch_label, Y_W: batch_weight, KEEP_PROB:0.5,
@@ -476,6 +476,8 @@ def train_12ECG_classifier(input_directory, output_directory):
             sess.run(train_opt, feed)
                 
             step += 1
+            if epoch < 30:
+                continue
             
             ################# validation  ######################
             if step % n_step == 0:
